@@ -1,3 +1,32 @@
+# github.com/makiuchi-d/gozxing v0.1.1
+## explicit; go 1.17
+github.com/makiuchi-d/gozxing
+github.com/makiuchi-d/gozxing/common
+github.com/makiuchi-d/gozxing/common/reedsolomon
+github.com/makiuchi-d/gozxing/common/util
+github.com/makiuchi-d/gozxing/qrcode
+github.com/makiuchi-d/gozxing/qrcode/decoder
+github.com/makiuchi-d/gozxing/qrcode/detector
+github.com/makiuchi-d/gozxing/qrcode/encoder
 # github.com/soywod/file64 v0.0.0-20160616125202-3d2feb9e6187
 ## explicit
 github.com/soywod/file64
+# golang.org/x/text v0.3.7
+## explicit; go 1.17
+golang.org/x/text/encoding
+golang.org/x/text/encoding/charmap
+golang.org/x/text/encoding/ianaindex
+golang.org/x/text/encoding/internal
+golang.org/x/text/encoding/internal/identifier
+golang.org/x/text/encoding/japanese
+golang.org/x/text/encoding/korean
+golang.org/x/text/encoding/simplifiedchinese
+golang.org/x/text/encoding/traditionalchinese
+golang.org/x/text/encoding/unicode
+golang.org/x/text/internal/utf8internal
+golang.org/x/text/runes
+golang.org/x/text/transform
+# golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1
+## explicit; go 1.11
+golang.org/x/xerrors
+golang.org/x/xerrors/internal
