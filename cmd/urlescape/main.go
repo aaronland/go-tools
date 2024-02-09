@@ -1,11 +1,11 @@
-// urlencode URL-encodes one or more command-line arguments emitting each to STDOUT. For example:
+// urlescape URL-escapes one or more command-line arguments emitting each to STDOUT. For example:
 //
-//	$> ./bin/urlencode 'csv://?archive=archive.tar.gz'
+//	$> ./bin/urlescape 'csv://?archive=archive.tar.gz'
 //	csv%3A%2F%2F%3Farchive%3Darchive.tar.gz
 //
 // Or:
 //
-//	$> echo 'csv://?archive=archive.tar.gz' | bin/urlencode -stdin
+//	$> echo 'csv://?archive=archive.tar.gz' | bin/urlescape -stdin
 //	csv%3A%2F%2F%3Farchive%3Darchive.tar.gz
 package main
 
@@ -21,8 +21,6 @@ import (
 func main() {
 
 	stdin := flag.Bool("stdin", false, "Read input from STDIN")
-
-	unescape := flag.Bool("unescape", false, "")
 
 	flag.Parse()
 
@@ -46,19 +44,7 @@ func main() {
 
 	for _, str := range raw {
 
-		if *unescape {
-
-			enc, err := url.QueryUnescape(str)
-
-			if err != nil {
-				log.Fatalf("Failed to unescape string, %v", err)
-			}
-
-			fmt.Println(enc)
-		} else {
-			enc := url.QueryEscape(str)
-			fmt.Println(enc)
-		}
-
+		enc := url.QueryEscape(str)
+		fmt.Println(enc)
 	}
 }
