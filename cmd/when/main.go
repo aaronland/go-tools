@@ -2,18 +2,18 @@
 package main
 
 import (
-	"log"
 	"flag"
 	"fmt"
-	"time"
+	"log"
 	"strconv"
+	"time"
 )
 
 func main() {
 
 	flag.Parse()
 
-	for _, str_ts := range flag.Args(){
+	for _, str_ts := range flag.Args() {
 
 		ts, err := strconv.ParseInt(str_ts, 10, 64)
 
@@ -22,7 +22,7 @@ func main() {
 		}
 
 		t := time.Unix(ts, 0)
-		
+
 		fmt.Println(t.Format(time.RFC3339))
 	}
 }
