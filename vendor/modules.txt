@@ -1,3 +1,8 @@
+# github.com/facebookarchive/atomicfile v0.0.0-20151019160806-2de1f203e7d5
+## explicit
+github.com/facebookarchive/atomicfile
+# github.com/facebookgo/atomicfile v0.0.0-20151019160806-2de1f203e7d5
+## explicit
 # github.com/makiuchi-d/gozxing v0.1.1
 ## explicit; go 1.17
 github.com/makiuchi-d/gozxing
@@ -11,6 +16,9 @@ github.com/makiuchi-d/gozxing/qrcode/encoder
 # github.com/soywod/file64 v0.0.0-20160616125202-3d2feb9e6187
 ## explicit
 github.com/soywod/file64
+# github.com/tidwall/pretty v1.2.1
+## explicit; go 1.16
+github.com/tidwall/pretty
 # golang.org/x/text v0.3.7
 ## explicit; go 1.17
 golang.org/x/text/encoding

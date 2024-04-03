@@ -10,6 +10,6 @@ cli:
 	go build -mod $(GOMOD) -ldflags="$(LDFLAGS)" -o bin/now cmd/now/main.go
 	go build -mod $(GOMOD) -ldflags="$(LDFLAGS)" -o bin/when cmd/when/main.go
 	go build -mod $(GOMOD) -ldflags="$(LDFLAGS)" -o bin/qrd cmd/qrd/main.go
-        go build -mod $(GOMOD) -ldflags="$(LDFLAGS)" -o bin/jp cmd/jp/main.go
-        go build -mod $(GOMOD) -ldflags="$(LDFLAGS)" -o bin/jf cmd/jf/main.go
-        go build -mod $(GOMOD) -ldflags="$(LDFLAGS)" -o bin/jv cmd/jv/main.go
+	go build -mod $(GOMOD) -ldflags="$(LDFLAGS)" -o bin/jp cmd/jp/main.go
+	go build -mod $(GOMOD) -ldflags="$(LDFLAGS)" -o bin/jf cmd/jf/main.go
+	go build -mod $(GOMOD) -ldflags="$(LDFLAGS)" -o bin/jv cmd/jv/main.go
