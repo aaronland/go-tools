@@ -2,6 +2,10 @@
 
 Common tools for describing and working with GeoJSON files.
 
+## Important
+
+This package has been deprecated and will no longer be maintained. These tools have been moved in to [aaronland/go-tools](https://github.com/aaronland/go-tools).
+
 ## Tools
 
 ### bbox2feature
