@@ -1,14 +1,23 @@
 package main
 
+/*
+
+> go run cmd/gh2b/main.go -mode geojson 9q8yy | go run cmd/show/main.go -stdin
+Features are viewable at http://localhost:8080
+
+> go run cmd/gh2b/main.go -mode geojson 9q8yy 9q5ct | go run cmd/show/main.go -stdin
+Features are viewable at http://localhost:8080
+
+*/
+
 import (
 	"context"
+	"embed"
 	"flag"
 	"fmt"
 	"io"
 	"log"
 	"log/slog"
-	// "net"
-	"embed"
 	"net/http"
 	"os"
 	"os/signal"
@@ -16,6 +25,7 @@ import (
 
 	"github.com/paulmach/orb/geojson"
 	"github.com/pkg/browser"
+	"github.com/tidwall/gjson"
 )
 
 //go:embed *.html
@@ -31,11 +41,9 @@ func main() {
 
 	var port int
 	var stdin bool
-	var is_featurecollection bool
 
 	flag.IntVar(&port, "port", 8080, "The port number to listen for requests on (on localhost). If 0 then a random port number will be chosen.")
 	flag.BoolVar(&stdin, "stdin", false, "")
-	flag.BoolVar(&is_featurecollection, "featurecollection", false, "")
 
 	flag.Parse()
 
@@ -43,39 +51,63 @@ func main() {
 
 	fc := geojson.NewFeatureCollection()
 
-	append_features := func(body []byte) error {
+	append_features := func(r io.Reader) error {
 
-		if is_featurecollection {
+		body, err := io.ReadAll(r)
+
+		if err != nil {
+			return fmt.Errorf("Failed to read body, %w", err)
+		}
+
+		type_rsp := gjson.GetBytes(body, "type")
+
+		switch type_rsp.String() {
+		case "Feature":
+
+			f, err := geojson.UnmarshalFeature(body)
+
+			if err != nil {
+				return fmt.Errorf("Failed to unmarshal Feature, %w", err)
+			}
+
+			fc.Append(f)
+
+		case "FeatureCollection":
 
 			other_fc, err := geojson.UnmarshalFeatureCollection(body)
 
 			if err != nil {
-				log.Fatalf("Failed to unmarshal record as FeatureCollection, %w", err)
+				return fmt.Errorf("Failed to unmarshal record as FeatureCollection, %w", err)
 			}
 
 			for _, f := range other_fc.Features {
 				fc.Append(f)
 			}
 
-			return nil
+		default:
+			return fmt.Errorf("Invalid type, %s", type_rsp.String())
 		}
 
-		f, err := geojson.UnmarshalFeature(body)
-
-		if err != nil {
-			log.Fatalf("Failed to unmarshal '%s' as Feature, %w", err)
-		}
-
-		fc.Append(f)
 		return nil
+	}
+
+	uris := flag.Args()
+
+	if len(uris) == 1 && uris[0] == "-" {
+		stdin = true
 	}
 
 	if stdin {
 
-		log.Fatal("Not implemented")
+		err := append_features(os.Stdin)
+
+		if err != nil {
+			log.Fatalf("Failed to append features, %v", err)
+		}
+
 	} else {
 
-		for _, path := range flag.Args() {
+		for _, path := range uris {
 
 			r, err := os.Open(path)
 
@@ -85,13 +117,7 @@ func main() {
 
 			defer r.Close()
 
-			body, err := io.ReadAll(r)
-
-			if err != nil {
-				log.Fatalf("Failed to read '%s', %", path, err)
-			}
-
-			err = append_features(body)
+			err = append_features(r)
 
 			if err != nil {
 				log.Fatalf("Failed to append features, %v", err)

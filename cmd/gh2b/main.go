@@ -1,5 +1,15 @@
 package main
 
+/*
+
+> go run cmd/gh2b/main.go 9q8yy
+37.749023,-122.431641,37.792969,-122.387695
+
+> go run cmd/gh2b/main.go -mode geojson 9q8yy
+{"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[-122.431640625,37.7490234375],[-122.3876953125,37.7490234375],[-122.3876953125,37.79296875],[-122.431640625,37.79296875],[-122.431640625,37.7490234375]]]},"properties":{"geohash":"9q8yy"}}
+
+*/
+
 import (
 	"encoding/json"
 	"flag"
