@@ -39,8 +39,8 @@ var css_FS embed.FS
 var js_FS embed.FS
 
 type mapConfig struct {
-	Provider string	`json:"provider"`
-	TileURL string `json:"tile_url"`
+	Provider string `json:"provider"`
+	TileURL  string `json:"tile_url"`
 }
 
 func main() {
@@ -53,7 +53,7 @@ func main() {
 
 	flag.StringVar(&map_provider, "map-provider", "leaflet", "")
 	flag.StringVar(&map_tile_url, "map-tile-url", "https://tile.openstreetmap.org/{z}/{x}/{y}.png", "")
-	
+
 	flag.IntVar(&port, "port", 8080, "The port number to listen for requests on (on localhost). If 0 then a random port number will be chosen.")
 	flag.BoolVar(&stdin, "stdin", false, "")
 
@@ -141,17 +141,17 @@ func main() {
 
 	map_cfg := &mapConfig{
 		Provider: map_provider,
-		TileURL: map_tile_url,
+		TileURL:  map_tile_url,
 	}
 
-	map_cfg_handler := mapConfigHandler(map_cfg)	
-	
+	map_cfg_handler := mapConfigHandler(map_cfg)
+
 	html_fs := http.FS(html_FS)
 	js_fs := http.FS(js_FS)
 	css_fs := http.FS(css_FS)
 
 	mux := http.NewServeMux()
-	mux.Handle("/map.json", map_cfg_handler)	
+	mux.Handle("/map.json", map_cfg_handler)
 	mux.Handle("/features.geojson", data_handler)
 
 	mux.Handle("/css/", http.FileServer(css_fs))
@@ -263,15 +263,15 @@ func mapConfigHandler(cfg *mapConfig) http.Handler {
 	fn := func(rsp http.ResponseWriter, req *http.Request) {
 
 		rsp.Header().Set("Content-type", "application/json")
-		
+
 		enc := json.NewEncoder(rsp)
 		err := enc.Encode(cfg)
-		
+
 		if err != nil {
 			slog.Error("Failed to encode map config", "error", err)
 			http.Error(rsp, "Internal server error", http.StatusInternalServerError)
 		}
-		
+
 		return
 	}
 

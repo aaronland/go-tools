@@ -5,7 +5,7 @@ package main
 > go run cmd/gh2b/main.go 9q8yy
 37.749023,-122.431641,37.792969,-122.387695
 
-> go run cmd/gh2b/main.go -mode geojson 9q8yy
+> go run cmd/gh2b/main.go -format geojson 9q8yy
 {"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[-122.431640625,37.7490234375],[-122.3876953125,37.7490234375],[-122.3876953125,37.79296875],[-122.431640625,37.79296875],[-122.431640625,37.7490234375]]]},"properties":{"geohash":"9q8yy"}}
 
 */
@@ -24,9 +24,9 @@ import (
 
 func main() {
 
-	var mode string
+	var format string
 
-	flag.StringVar(&mode, "mode", "latlon", "Valid options are: latlon, lonlat, geojson")
+	flag.StringVar(&format, "format", "latlon", "Valid options are: latlon, lonlat, geojson")
 
 	flag.Parse()
 
@@ -34,7 +34,7 @@ func main() {
 
 	var fc *geojson.FeatureCollection
 
-	if mode == "geojson" && len(geohashes) > 1 {
+	if format == "geojson" && len(geohashes) > 1 {
 		fc = geojson.NewFeatureCollection()
 	}
 
@@ -42,7 +42,7 @@ func main() {
 
 		b := geohash.BoundingBox(hash)
 
-		switch mode {
+		switch format {
 		case "latlon":
 			fmt.Printf("%06f,%06f,%06f,%06f", b.MinLat, b.MinLng, b.MaxLat, b.MaxLng)
 		case "lonlat":
@@ -70,7 +70,7 @@ func main() {
 		}
 	}
 
-	if mode == "geojson" && len(geohashes) > 1 {
+	if format == "geojson" && len(geohashes) > 1 {
 
 		enc := json.NewEncoder(os.Stdout)
 		err := enc.Encode(fc)
