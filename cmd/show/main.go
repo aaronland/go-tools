@@ -8,6 +8,8 @@ Features are viewable at http://localhost:8080
 > go run cmd/gh2b/main.go -mode geojson 9q8yy 9q5ct | go run cmd/show/main.go -stdin
 Features are viewable at http://localhost:8080
 
+go run cmd/gh2b/main.go -format geojson 9q8yp | go run cmd/show/main.go -map-provider protomaps -map-tile-url file:///usr/local/sfomuseum/go-http-protomaps/cmd/example/sfo.pmtiles -
+
 */
 
 import (
@@ -20,12 +22,14 @@ import (
 	"log"
 	"log/slog"
 	"net/http"
+	"net/url"
 	"os"
 	"os/signal"
 	"time"
 
 	"github.com/paulmach/orb/geojson"
 	"github.com/pkg/browser"
+	"github.com/sfomuseum/go-http-protomaps"
 	"github.com/tidwall/gjson"
 )
 
@@ -137,7 +141,35 @@ func main() {
 		}
 	}
 
+	//
+
+	mux := http.NewServeMux()
+
 	data_handler := dataHandler(fc)
+
+	//
+
+	if map_provider == "protomaps" {
+
+		u, err := url.Parse(map_tile_url)
+
+		if err != nil {
+			log.Fatalf("Failed to parse Protomaps tile URL, %w", err)
+		}
+
+		if u.Scheme == "file" {
+
+			mux_url, mux_handler, err := protomaps.FileHandlerFromPath(u.Path, "")
+
+			if err != nil {
+				log.Fatalf("Failed to determine absolute path for '%s', %v", map_tile_url, err)
+			}
+
+			mux.Handle(mux_url, mux_handler)
+			map_tile_url = mux_url
+		}
+
+	}
 
 	map_cfg := &mapConfig{
 		Provider: map_provider,
@@ -146,11 +178,12 @@ func main() {
 
 	map_cfg_handler := mapConfigHandler(map_cfg)
 
+	//
+
 	html_fs := http.FS(html_FS)
 	js_fs := http.FS(js_FS)
 	css_fs := http.FS(css_FS)
 
-	mux := http.NewServeMux()
 	mux.Handle("/map.json", map_cfg_handler)
 	mux.Handle("/features.geojson", data_handler)
 
