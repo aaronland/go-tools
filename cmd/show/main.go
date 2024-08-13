@@ -21,6 +21,7 @@ import (
 	"io"
 	"log"
 	"log/slog"
+	"net"
 	"net/http"
 	"net/url"
 	"os"
@@ -58,7 +59,7 @@ func main() {
 	flag.StringVar(&map_provider, "map-provider", "leaflet", "")
 	flag.StringVar(&map_tile_url, "map-tile-url", "https://tile.openstreetmap.org/{z}/{x}/{y}.png", "")
 
-	flag.IntVar(&port, "port", 8080, "The port number to listen for requests on (on localhost). If 0 then a random port number will be chosen.")
+	flag.IntVar(&port, "port", 0, "The port number to listen for requests on (on localhost). If 0 then a random port number will be chosen.")
 	flag.BoolVar(&stdin, "stdin", false, "")
 
 	flag.Parse()
@@ -145,7 +146,17 @@ func main() {
 
 	mux := http.NewServeMux()
 
+	html_fs := http.FS(html_FS)
+	js_fs := http.FS(js_FS)
+	css_fs := http.FS(css_FS)
+
+	mux.Handle("/css/", http.FileServer(css_fs))
+	mux.Handle("/javascript/", http.FileServer(js_fs))
+	mux.Handle("/", http.FileServer(html_fs))
+
 	data_handler := dataHandler(fc)
+
+	mux.Handle("/features.geojson", data_handler)
 
 	//
 
@@ -178,18 +189,27 @@ func main() {
 
 	map_cfg_handler := mapConfigHandler(map_cfg)
 
+	mux.Handle("/map.json", map_cfg_handler)
+
 	//
 
-	html_fs := http.FS(html_FS)
-	js_fs := http.FS(js_FS)
-	css_fs := http.FS(css_FS)
+	if port == 0 {
 
-	mux.Handle("/map.json", map_cfg_handler)
-	mux.Handle("/features.geojson", data_handler)
+		listener, err := net.Listen("tcp", "localhost:0")
 
-	mux.Handle("/css/", http.FileServer(css_fs))
-	mux.Handle("/javascript/", http.FileServer(js_fs))
-	mux.Handle("/", http.FileServer(html_fs))
+		if err != nil {
+			log.Fatalf("Failed to determine next available port, %v", err)
+		}
+
+		port = listener.Addr().(*net.TCPAddr).Port
+		err = listener.Close()
+
+		if err != nil {
+			log.Fatalf("Failed to close listener used to derive port, %v", err)
+		}
+	}
+
+	//
 
 	addr := fmt.Sprintf("localhost:%d", port)
 	url := fmt.Sprintf("http://%s", addr)
@@ -267,8 +287,7 @@ func main() {
 		log.Fatalf("Failed to open URL %s, %v", url, err)
 	}
 
-	fmt.Printf("Features are viewable at %s\n", url)
-
+	log.Printf("Features are viewable at %s\n", url)
 	<-done_ch
 }
 
