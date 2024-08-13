@@ -54,7 +54,9 @@ func main() {
 			bounds := orb.Bound{Min: min, Max: max}
 
 			f := geojson.NewFeature(bounds)
+			// f.ID = hash
 			f.Properties["geohash"] = hash
+			f.BBox = geojson.NewBBox(bounds)
 
 			if len(geohashes) > 1 {
 				fc.Append(f)
