@@ -14,3 +14,4 @@ cli:
 	go build -mod $(GOMOD) -ldflags="$(LDFLAGS)" -o bin/jp cmd/jp/main.go
 	go build -mod $(GOMOD) -ldflags="$(LDFLAGS)" -o bin/jf cmd/jf/main.go
 	go build -mod $(GOMOD) -ldflags="$(LDFLAGS)" -o bin/jv cmd/jv/main.go
+	go build -mod $(GOMOD) -ldflags="$(LDFLAGS)" -o bin/ts cmd/ts/main.go
