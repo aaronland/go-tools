@@ -16,6 +16,13 @@ func main() {
 	
 	flag.Parse()
 
+	switch layout {
+	case "ymd":
+		layout = "2006-01-02"
+	default:
+		// 
+	}
+	
 	for _, str_t := range flag.Args() {
 
 		t, err := time.Parse(layout, str_t)
