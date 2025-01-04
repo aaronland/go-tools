@@ -2,15 +2,24 @@ GOMOD=$(shell test -f "go.work" && echo "readonly" || echo "vendor")
 LDFLAGS=-s -w
 
 cli:
-	go build -mod $(GOMOD) -ldflags="$(LDFLAGS)" -o bin/b64e cmd/b64e/main.go
-	go build -mod $(GOMOD) -ldflags="$(LDFLAGS)" -o bin/b64d cmd/b64d/main.go
-	go build -mod $(GOMOD) -ldflags="$(LDFLAGS)" -o bin/md5e cmd/md5e/main.go
-	go build -mod $(GOMOD) -ldflags="$(LDFLAGS)" -o bin/urlescape cmd/urlescape/main.go
-	go build -mod $(GOMOD) -ldflags="$(LDFLAGS)" -o bin/urlunescape cmd/urlunescape/main.go
-	go build -mod $(GOMOD) -ldflags="$(LDFLAGS)" -o bin/now cmd/now/main.go
-	go build -mod $(GOMOD) -ldflags="$(LDFLAGS)" -o bin/when cmd/when/main.go
-	go build -mod $(GOMOD) -ldflags="$(LDFLAGS)" -o bin/qrd cmd/qrd/main.go
-	go build -mod $(GOMOD) -ldflags="$(LDFLAGS)" -o bin/qre cmd/qre/main.go
-	go build -mod $(GOMOD) -ldflags="$(LDFLAGS)" -o bin/jp cmd/jp/main.go
-	go build -mod $(GOMOD) -ldflags="$(LDFLAGS)" -o bin/jf cmd/jf/main.go
-	go build -mod $(GOMOD) -ldflags="$(LDFLAGS)" -o bin/jv cmd/jv/main.go
+	@make build-tool TOOL=b64e
+	@make build-tool TOOL=b64d
+	@make build-tool TOOL=md5e
+	@make build-tool TOOL=urlescape
+	@make build-tool TOOL=urlunescape
+	@make build-tool TOOL=now
+	@make build-tool TOOL=when
+	@make build-tool TOOL=ts
+	@make build-tool TOOL=qrd
+	@make build-tool TOOL=qre
+	@make build-tool TOOL=jp
+	@make build-tool TOOL=jf
+	@make build-tool TOOL=jv
+	@make build-tool TOOL=gh2bb
+	@make build-tool TOOL=pt2gh
+	@make build-tool TOOL=bb2f
+	@make build-tool TOOL=fc2d
+	@make build-tool TOOL=pts2ls
+
+build-tool:
+	go build -mod $(GOMOD) -ldflags="$(LDFLAGS)" -o bin/$(TOOL) cmd/$(TOOL)/main.go

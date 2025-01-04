@@ -1,6 +1,6 @@
 module github.com/aaronland/go-tools
 
-go 1.22.4
+go 1.23.3
 
 require (
 	github.com/facebookarchive/atomicfile v0.0.0-20151019160806-2de1f203e7d5
