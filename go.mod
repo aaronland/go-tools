@@ -7,7 +7,6 @@ require (
 	github.com/makiuchi-d/gozxing v0.1.1
 	github.com/mmcloughlin/geohash v0.10.0
 	github.com/paulmach/orb v0.11.1
-	github.com/sfomuseum/go-geojson-tools v0.0.0-20240515180250-f0da2597eb0a
 	github.com/soywod/file64 v0.0.0-20160616125202-3d2feb9e6187
 	github.com/tidwall/pretty v1.2.1
 )

@@ -26,7 +26,7 @@ func main() {
 
 	var format string
 
-	flag.StringVar(&format, "format", "latlon", "Valid options are: latlon, lonlat, geojson")
+	flag.StringVar(&format, "format", "lonlat", "Valid options are: latlon, lonlat, geojson")
 
 	flag.Parse()
 

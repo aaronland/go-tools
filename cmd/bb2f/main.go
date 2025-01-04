@@ -3,19 +3,38 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io"
 	"log"
+	"os"
 
-	"github.com/sfomuseum/go-geojson-tools"
+	"github.com/aaronland/go-tools/constants"
+	"github.com/aaronland/go-tools/geojson"
 )
 
 func main() {
 
-	str_bbox := flag.String("bbox", "", "")
-	latlon := flag.Bool("latlon", true, "")
+	var latlon bool
+	var str_bbox string
+
+	flag.StringVar(&str_bbox, "bbox", "", "")
+	flag.BoolVar(&latlon, "latlon", false, "")
 
 	flag.Parse()
 
-	f, err := geojson.BoundingBoxToFeature(*str_bbox, *latlon)
+	if str_bbox == constants.STDIN {
+
+		body, err := io.ReadAll(os.Stdin)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		str_bbox = string(body)
+	}
+
+	log.Println(str_bbox)
+
+	f, err := geojson.BoundingBoxToFeature(str_bbox, latlon)
 
 	if err != nil {
 		log.Fatalf("Failed to derive feature, %w", err)

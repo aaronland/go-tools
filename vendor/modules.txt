@@ -20,9 +20,6 @@ github.com/mmcloughlin/geohash
 ## explicit; go 1.15
 github.com/paulmach/orb
 github.com/paulmach/orb/geojson
-# github.com/sfomuseum/go-geojson-tools v0.0.0-20240515180250-f0da2597eb0a
-## explicit; go 1.21
-github.com/sfomuseum/go-geojson-tools
 # github.com/soywod/file64 v0.0.0-20160616125202-3d2feb9e6187
 ## explicit
 github.com/soywod/file64

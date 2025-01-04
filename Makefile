@@ -17,6 +17,7 @@ cli:
 	@make build-tool TOOL=jv
 	@make build-tool TOOL=gh2bb
 	@make build-tool TOOL=pt2gh
+	@make build-tool TOOL=pt2f
 	@make build-tool TOOL=bb2f
 	@make build-tool TOOL=fc2d
 	@make build-tool TOOL=pts2ls

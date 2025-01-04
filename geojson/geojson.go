@@ -12,7 +12,6 @@ import (
 func BoundingBoxToFeature(str_bbox string, is_latlon bool) (*geojson.Feature, error) {
 
 	str_bbox = strings.TrimSpace(str_bbox)
-
 	str_parts := strings.Split(str_bbox, ",")
 
 	if len(str_parts) != 4 {
@@ -57,10 +56,17 @@ func BoundingBoxToFeature(str_bbox string, is_latlon bool) (*geojson.Feature, er
 	b := orb.Bound{min, max}
 	poly := b.ToPolygon()
 
+	bbox := [4]float64{
+		min.X(),
+		min.Y(),
+		max.X(),
+		max.Y(),
+	}
+
 	f := geojson.NewFeature(poly)
 	// Without this orb/geojson returns a null element for 'properties'
 	// which makes tools like geojson.io sad...
-	f.Properties = map[string]interface{}{"bbox": str_bbox}
+	f.Properties = map[string]interface{}{"bbox": bbox}
 
 	return f, nil
 }
