@@ -2,6 +2,7 @@ GOMOD=$(shell test -f "go.work" && echo "readonly" || echo "vendor")
 LDFLAGS=-s -w
 
 cli:
+	rm -f ./bin/*
 	@make build-tool TOOL=b64e
 	@make build-tool TOOL=b64d
 	@make build-tool TOOL=md5e
