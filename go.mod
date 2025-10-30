@@ -1,12 +1,12 @@
 module github.com/aaronland/go-tools
 
-go 1.23.3
+go 1.25
 
 require (
 	github.com/facebookarchive/atomicfile v0.0.0-20151019160806-2de1f203e7d5
 	github.com/makiuchi-d/gozxing v0.1.1
 	github.com/mmcloughlin/geohash v0.10.0
-	github.com/paulmach/orb v0.11.1
+	github.com/paulmach/orb v0.12.0
 	github.com/tidwall/pretty v1.2.1
 )
 
