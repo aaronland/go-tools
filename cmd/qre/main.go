@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"image/png"
+	"io"
 	"log"
 	"os"
 	"strings"
@@ -27,8 +28,21 @@ func main() {
 
 	body := strings.Join(flag.Args(), " ")
 
-	if body == "" {
+	switch body {
+	case "":
 		log.Fatalf("Missing body")
+	case "-":
+
+		b, err := io.ReadAll(os.Stdin)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		body = string(b)
+
+	default:
+		// pass
 	}
 
 	enc := qrcode.NewQRCodeWriter()
